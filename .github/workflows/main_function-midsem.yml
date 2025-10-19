@@ -24,6 +24,12 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    - name: Debug ZIP Contents
+      run: |
+        ls -la
+        zip -r functionapp.zip .
+        ls -la functionapp.zip
+
     - name: Deploy to Azure Functions
       uses: Azure/functions-action@v1
       with:
@@ -38,4 +44,4 @@ jobs:
         sleep 30
         curl -X POST "https://function-midsem-hkfhewhzagh6gucd.canadacentral-01.azurewebsites.net/api/items" \
           -H "Content-Type: application/json" \
-          -d '{"name": "GitHub Deploy Success!"}'
+          -d '{"name": "GitHub 401 FIXED!"}'
