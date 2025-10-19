@@ -1,0 +1,8 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "python",
+    "AzureCosmosDB": "AccountEndpoint=https://cosmos-midsem.documents.azure.com:443/;AccountKey=47MLIcVm8AuVeNIof3NwgoTkn8hDy6O7A6dg6GHEyx58t9xFqlSEqrkOK8p2xZK6MUgKYZjEG0g4ACDbHUyMQg==;"
+  }
+}
