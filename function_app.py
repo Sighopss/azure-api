@@ -7,7 +7,7 @@ from datetime import datetime
 app = func.FunctionApp()
 
 # POST /api/items - CREATE item in Cosmos DB
-@app.route(route="items", methods=["POST"], auth_level=func.AuthLevel.ANONYMOUS)
+@app.route(route="items", methods=["POST"], auth_level=func.AuthLevel.FUNCTION)
 @app.cosmos_db_output(
     arg_name="output_doc",
     database_name="TodoItems",  # Consistent with get_items
@@ -47,7 +47,7 @@ def create_item(req: func.HttpRequest, output_doc: func.Out[func.Document]) -> f
     )
 
 # GET /api/items - READ all items
-@app.route(route="items", methods=["GET"], auth_level=func.AuthLevel.ANONYMOUS)
+@app.route(route="items", methods=["GET"], auth_level=func.AuthLevel.FUNCTION)
 @app.cosmos_db_input(
     arg_name="documents", 
     database_name="TodoItems",
@@ -67,3 +67,4 @@ def get_items(req: func.HttpRequest, documents) -> func.HttpResponse:
     except Exception as e:
         logging.error(f"Failed to fetch items: {str(e)}")
         return func.HttpResponse(f"Cosmos DB error: {str(e)}", status_code=500)
+
