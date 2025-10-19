@@ -29,18 +29,13 @@ jobs:
       with:
         app-name: 'function-midsem'
         package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
-        publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
-        enable-oryx-build: true      # ← FIX #1: REMOTE BUILD!
-        remote-build: true           # ← FIX #2: BUILD ON AZURE!
+        publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}  # ← YOUR SECRET!
+        enable-oryx-build: true
+        remote-build: true
     
     - name: Test API
       run: |
         sleep 30
         curl -X POST "function-midsem-hkfhewhzagh6gucd.canadacentral-01.azurewebsites.net/api/items" \
           -H "Content-Type: application/json" \
-          -d '{"name": "GitHub Success!"}' \
-          || echo "Test failed, but deployment succeeded"
-   
-
-          
-
+          -d '{"name": "GitHub Success!"}'
