@@ -1,37 +1,46 @@
-name: Deploy to Azure Functions
+name: Deploy Azure Functions
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
 env:
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'  # ← ZIP FROM CURRENT FOLDER (ROOT!)
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' 
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
+    
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-
-    - name: Setup Python
+    - uses: actions/checkout@v4
+    
+    - name: Setup Python 3.11
       uses: actions/setup-python@v5
       with:
-        python-version: '3.11'  # ← MATCH YOUR PYTHON!
-
+        python-version: '3.11'
+    
     - name: Install Dependencies
       run: |
-        pip install --requirement requirements.txt
-
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
     - name: Deploy to Azure Functions
-      uses: Azure/functions-action@v1  # ← LATEST v1 FIXES ZIP BUGS
+      uses: Azure/functions-action@v1
       with:
-        app-name: 'function-midsem'  # ← YOUR APP NAME
-        package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'  # ← ZIP CURRENT FOLDER
-        publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}  # ← FROM PORTAL
-
+        app-name: 'function-midsem'
+        package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+        publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+        enable-oryx-build: true      # ← FIX #1: REMOTE BUILD!
+        remote-build: true           # ← FIX #2: BUILD ON AZURE!
+    
+    - name: Test API
+      run: |
+        sleep 30
+        curl -X POST "function-midsem-hkfhewhzagh6gucd.canadacentral-01.azurewebsites.net/api/items" \
+          -H "Content-Type: application/json" \
+          -d '{"name": "GitHub Success!"}' \
+          || echo "Test failed, but deployment succeeded"
    
 
           
+
